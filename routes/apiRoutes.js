@@ -3,17 +3,56 @@ var db = require("../models");
 module.exports = function (app) {
 
     // gets list of users //
+    app.get("/", function (req, res) {
+        db.Users.findAll({}).then(function (dbUsers) {
+            res.json(dbUsers);
+        })
+    })
+
     app.get("/api/userGet", function (req, res) {
         db.Users.findAll({}).then(function (dbUsers) {
             res.json(dbUsers);
         })
     })
 
-    // gets list of user specific activities //
-    app.get("/api/choresGet/:user_id", function (req, res) {
+    app.get("/api/choresGet", function (req, res) {
+        db.Chores.findAll({}).then(function (dbChores) {
+            res.json(dbChores);
+        })
+    })
+
+    // gets list of all chores for user //
+    app.get("/api/choresGet/:username", function (req, res) {
         db.Chores.findAll({
+            order: [['createdAt', 'DESC']],
             where: {
-                user_id: req.params.user_id
+                username: req.params.username,
+            }
+        }).then(function (dbChores) {
+            res.json(dbChores);
+        });
+    });
+
+    // gets list of uncompleted chores for user //
+    app.get("/api/choresTodoGet/:username", function (req, res) {
+        db.Chores.findAll({
+            order: [['createdAt', 'DESC']],
+            where: {
+                username: req.params.username,
+                chore_state: false
+            }
+        }).then(function (dbChores) {
+            res.json(dbChores);
+        });
+    });
+
+    // gets list of completed chores for user //
+    app.get("/api/choresDoneGet/:username", function (req, res) {
+        db.Chores.findAll({
+            order: [['createdAt', 'DESC']],
+            where: {
+                username: req.params.username,
+                chore_state: true
             }
         }).then(function (dbChores) {
             res.json(dbChores);
@@ -21,28 +60,34 @@ module.exports = function (app) {
     });
 
     // get data for table displays
-    app.get("/api/userdataGet/:user_id", function (req, res) {
-        var chores_hbsObject = [];
-        var users_hbsObject = [];
+    app.get("/api/choresAllGet/:username", function (req, res) {
+        var chores_todo_hbsObject = [];
+        var chores_done_hbsObject = [];
+        var chores_all = []
         db.Chores.findAll({
             order: [['createdAt', 'DESC']],
             where: {
-                user_id: req.params.user_id,
+                username: req.params.username,
+                chore_state: false
             }
         }).then(function (data) {
             for (var i = 0; i < data.length; i++) {
-                chores_hbsObject.push(data[i].dataValues);
+                chores_todo_hbsObject.push(data[i]);
             }
+            chores_all.push(chores_todo_hbsObject);
         });
-        db.Users.findAll({
+        db.Chores.findAll({
+            order: [['createdAt', 'DESC']],
             where: {
-                user_id: req.params.user_id,
+                username: req.params.username,
+                chore_state: true
             }
         }).then(function (data) {
-            res.render("layouts/tables", {
-                Chores: chores_hbsObject,
-                Users: users_hbsObject
-            })
+            for (var i = 0; i < data.length; i++) {
+                chores_done_hbsObject.push(data[i]);
+            }
+            chores_all.push(chores_done_hbsObject);
+            res.json(chores_all);
         });
     });
 

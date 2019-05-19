@@ -16,14 +16,14 @@ create table users(
 drop table if exists chores;
 create table chores(
     chore_id int not null auto_increment,
-    user_id int not null,
+    username int not null,
     chore varchar(255) not null,
     overview text(1000) null,
     chore_state boolean not null default 0,
     due_date date not null,
     createdAt timestamp default CURRENT_TIMESTAMP not null,
     updatedAt timestamp default CURRENT_TIMESTAMP not null,
-    foreign key (user_id) references users(user_id),
+    foreign key (username) references users(username),
 	primary key (chore_id)
 );
 SELECT * FROM chores;

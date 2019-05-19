@@ -6,13 +6,13 @@ module.exports = function (sequelize, DataTypes) {
       autoIncrement: true,
       primaryKey: true
     },
-    user_id: {
-      type: DataTypes.INTEGER,
+    username: {
+      type: DataTypes.STRING,
       allowNull: false,
       notEmpty: true,
       references: {
         model: 'Users', // Can be both a string representing the table name or a Sequelize model
-        key: 'user_id'
+        key: 'username'
       }
     },
     chore: {
@@ -27,13 +27,7 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false
-    },
-    total_cal_burn: {
-      type: DataTypes.INTEGER,
-      notEmpty: true,
-      isNumeric: true,
-      isInt: true
     }
   });
-  return Activities;
+  return Chores;
 };
