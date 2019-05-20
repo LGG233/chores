@@ -27,7 +27,12 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false
+    },
+    due_date: {
+      type: DataTypes.DATE,
+      allowNull: false,
     }
+
   });
   return Chores;
 };

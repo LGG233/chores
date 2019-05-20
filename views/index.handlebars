@@ -1,0 +1,61 @@
+<h1 class="top-name text">Get to Work!</h1>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-9">
+            <h2 class="menu-header text">To do:</h2>
+            <div class="row">
+                <div class="col-md-3"><b>Responsible</b></div>
+                <div class="col-md-3"><b>Chore</b></div>
+                <div class="col-md-3"><b>Overview</b></div>
+                <div class="col-md-3"><b>Finish By</b></div>
+            </div>
+            <div>
+                {{#each Chores}}
+                {{#unless chore_state}}
+                <div class="row">
+                    <div class="col-md-3">{{this.username}}</div>
+                    <div class="col-md-3">{{this.chore}}</div>
+                    <div class="col-md-3">{{this.overview}}</div>
+                    <div class="col-md-3">{{this.due_date}}
+                        <button type="button" class="change-chore btn btn-primary btn-sm" data-id="{{this.chore_id}}"
+                            data-newstatus="{{this.chore_status}}">
+                            {{#if chore_state}}Redo{{else}}Done{{/if}}
+                        </button>
+                        <button type="button" class="delete-chore btn btn-primary btn-sm"
+                            data-id="{{this.chore_id}}">X</button>
+                    </div>
+                </div>
+                {{/unless}}
+                {{/each}}
+            </div>
+        </div>
+        <div class="col-lg-9">
+            <h2 class="menu-header text">Done:</h2>
+            <div class="row">
+                <div class="col-md-3"><b>Responsible</b></div>
+                <div class="col-md-3"><b>Chore</b></div>
+                <div class="col-md-3"><b>Overview</b></div>
+                <div class="col-md-3"><b>Finish By</b></div>
+            </div>
+            <div>
+                {{#each Chores}}
+                {{#if chore_state}}
+                <div class="row">
+                    <div class="col-md-3">{{this.username}}</div>
+                    <div class="col-md-3">{{this.chore}}</div>
+                    <div class="col-md-3">{{this.overview}}</div>
+                    <div class="col-md-3">{{this.due_date}}
+                        <button type="button" class="change-chore btn btn-primary btn-sm" data-id="{{this.chore_id}}"
+                            data-newstatus="{{this.chore_status}}">
+                            {{#if chore_state}}Redo{{else}}Done{{/if}}
+                        </button>
+                        <button type="button" class="delete-chore btn btn-primary btn-sm"
+                            data-id="{{this.chore_id}}">X</button></div>
+                </div>
+                {{/if}}
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</div>
