@@ -3,7 +3,7 @@ var db = require("../models");
 module.exports = function (app) {
 
     // gets list of users //
-    app.get("/", function (req, res) {
+    app.get("/api/allUsersGet", function (req, res) {
         db.Users.findAll({}).then(function (dbUsers) {
             res.json(dbUsers);
         })
@@ -15,7 +15,7 @@ module.exports = function (app) {
         })
     })
 
-    app.get("/api/choresGet", function (req, res) {
+    app.get("/", function (req, res) {
         db.Chores.findAll({}).then(function (dbChores) {
             var hbsObject = {
                 Chores: dbChores

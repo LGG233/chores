@@ -1,24 +1,26 @@
-<h1 class="top-name text">Get to Work!</h1>
-<br>
-<div class="container">
+<div class="jumbotron banner red-carpet text-center">
+    <h1 class="display-4">Get to Work!</h1>
+    <h4 classs="lead">The family chore app</h4>
+</div>
+<div class="container text-box">
     <div class="row">
         <div class="col-lg-9">
-            <h2 class="menu-header text">To do:</h2>
-            <div class="row">
-                <div class="col-md-3"><b>Responsible</b></div>
-                <div class="col-md-3"><b>Chore</b></div>
-                <div class="col-md-3"><b>Overview</b></div>
-                <div class="col-md-3"><b>Finish By</b></div>
+            <h2 class="menu-header text white-text">To do:</h2>
+            <div class="row white-text">
+                <div class="col-md-3"><b>Who</b></div>
+                <div class="col-md-3"><b>What</b></div>
+                <div class="col-md-3"><b>Where</b></div>
+                <div class="col-md-3"><b>When</b></div>
             </div>
             <div>
                 {{#each Chores}}
                 {{#unless chore_state}}
-                <div class="row">
+                <div class="row white-text">
                     <div class="col-md-3">{{this.username}}</div>
                     <div class="col-md-3">{{this.chore}}</div>
                     <div class="col-md-3">{{this.overview}}</div>
                     <div class="col-md-3">{{this.due_date}}
-                        <button type="button" class="change-chore btn btn-primary btn-sm" data-id="{{this.chore_id}}"
+                        <button type="button" class="change-status btn btn-primary btn-sm" data-id="{{this.chore_id}}"
                             data-newstatus="{{this.chore_status}}">
                             {{#if chore_state}}Redo{{else}}Done{{/if}}
                         </button>
@@ -33,10 +35,10 @@
         <div class="col-lg-9">
             <h2 class="menu-header text">Done:</h2>
             <div class="row">
-                <div class="col-md-3"><b>Responsible</b></div>
-                <div class="col-md-3"><b>Chore</b></div>
-                <div class="col-md-3"><b>Overview</b></div>
-                <div class="col-md-3"><b>Finish By</b></div>
+                <div class="col-md-3"><b>Who</b></div>
+                <div class="col-md-3"><b>What</b></div>
+                <div class="col-md-3"><b>Where</b></div>
+                <div class="col-md-3"><b>When</b></div>
             </div>
             <div>
                 {{#each Chores}}
@@ -46,7 +48,7 @@
                     <div class="col-md-3">{{this.chore}}</div>
                     <div class="col-md-3">{{this.overview}}</div>
                     <div class="col-md-3">{{this.due_date}}
-                        <button type="button" class="change-chore btn btn-primary btn-sm" data-id="{{this.chore_id}}"
+                        <button type="button" class="change-status btn btn-primary btn-sm" data-id="{{this.chore_id}}"
                             data-newstatus="{{this.chore_status}}">
                             {{#if chore_state}}Redo{{else}}Done{{/if}}
                         </button>
@@ -56,6 +58,60 @@
                 {{/if}}
                 {{/each}}
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for New Chore -->
+<div id="new-chore-modal" class="modal fade" role="dialog" data-backdrop="static" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">New Chore</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Input validation -->
+                <form id="sign-in-modal-form" class="needs-validation" novalidate>
+                    <div class="form-group">
+                        <label for="inputUserName">Who</label>
+                        <input type="text" class="form-control" id="inputUserName" placeholder="Who's gonna do the work"
+                            required>
+                        <div class="invalid-feedback">
+                            Please enter a name
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputChore">What</label>
+                        <input type="text" class="form-control" id="inputChore" placeholder="What are they gonna do"
+                            required>
+                        <div class="invalid-feedback">
+                            Please enter the chore
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputDescription">What</label>
+                        <input type="text" class="form-control" id="inputDescription" placeholder="Tell us about it">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputDate">What</label>
+                        <input type="date" class="form-control" id="inputDate" placeholder="2019-01-01" required>
+                        <div class="invalid-feedback">
+                            Please enter a due date
+                        </div>
+                    </div>
+                    <button id="submitNewChore" type="submit" class="btn btn-primary btn-block">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="main-buttons ">
+    <div class="container">
+        <div class="row center-btns">
+            <button type="button" id="new-chore-btn" class="btn btn-primary btn-sm">Add new chore</button>
+            <button type="button" id="edit-chore-btn" class="btn btn-primary btn-sm">Edit existing chore</button>
         </div>
     </div>
 </div>
