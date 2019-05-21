@@ -3,18 +3,6 @@ var db = require("../models");
 module.exports = function (app) {
 
     // gets list of users //
-    app.get("/api/allUsersGet", function (req, res) {
-        db.Users.findAll({}).then(function (dbUsers) {
-            res.json(dbUsers);
-        })
-    })
-
-    app.get("/api/userGet", function (req, res) {
-        db.Users.findAll({}).then(function (dbUsers) {
-            res.json(dbUsers);
-        })
-    })
-
     app.get("/", function (req, res) {
         db.Chores.findAll({}).then(function (dbChores) {
             var hbsObject = {
@@ -22,6 +10,19 @@ module.exports = function (app) {
               };
         res.render("index", hbsObject);
     })
+
+    app.get("/api/allUsersGet", function (req, res) {
+        db.Users.findAll({}).then(function (dbUsers) {
+            res.json(dbUsers);
+        })
+    })
+
+    app.get("/api/userGet/:username", function (req, res) {
+        db.Users.findAll({}).then(function (dbUsers) {
+            res.json(dbUsers);
+        })
+    })
+
 })
 
 // gets list of all chores for user //
