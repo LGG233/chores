@@ -2,79 +2,82 @@
 
 $(document).ready(function () {
 
-    // Random quotation module ================================================
-    var Quotes = [{
-        quote: "In fitness, there are no short cuts. It involves immense discipline and hard work",
-        author: "Mahesh Babu"
-    },
-    {
-        quote: "Time and health are two precious assets that we don't recognize and appreciate until they have been depleted",
-        author: "Denis Waitley"
-    },
-    {
-        quote: "For me, fitness is not just about hitting the gym; it is also about an inner happiness and an overall well-being",
-        author: "Rakul Preet Singh"
-    },
-    {
-        quote: "Fitness is not about being better than someone else... It's about being better than you used to be",
-        author: "Khloe Kardashian"
-    },
-    {
-        quote: "Fitness helps me think better, feel better, and move better",
-        author: "Jason Winston George"
-    },
-    {
-        quote: "True enjoyment comes from activity of the mind and exercise of the body; the two are ever united",
-        author: "Wilhelm von Humboldt"
-    },
-    {
-        quote: "A muscle is like a car. If you want it to run well early in the morning, you have to warm it up",
-        author: "Florence Griffith Joyner"
-    },
-    {
-        quote: "You can always improve your fitness if you keep training",
-        author: "Pastor Maldonado"
-    },
-    {
-        quote: "It's so easy to lose your fitness and so hard to gain it back",
-        author: "Alex Morgan"
-    },
-    {
-        quote: "You can't be fat and fast, too; so lift, run, diet and work",
-        author: "Hank Stram"
-    },
-    {
-        quote: "For me, fitness is a part of my everyday life. But fitness does not mean having big muscles; it means being active, quick, and flexible. It can be defined in many terms",
-        author: "Varun Dhawan"
-    }
-    ];
-    var rn;
+    $('#new-chore-btn').click(function () {
+        event.preventDefault();
+        $('#new-chore-modal').modal('show');
+    });
 
-    randomNumberGenerator();
+    $('#edit-chore-btn').click(function () {
+        event.preventDefault();
+        $('#edit-chore-modal').modal('show');
+    });
 
-    $("#fq").text(Quotes[rn].quote);
-    $("#fqa").text(Quotes[rn].author);
+    $("#submitNewChore").on("click", function () {
+        event.preventDefault();
+        var data = {
+            username: $("#inputUserName").val().trim(),
+            chore: $("#inputChore").val().trim(),
+            overview: $("#inputDescription").val().trim(),
+            due_date: $("#inputDate").val().trim()
+        };
+        console.log(data);
+        api.newChore(JSON.stringify(data));
+        console.log("chore successfully created");
+        window.location = 'localhost:8080';
+        $('#new-chore-modal').modal('hide');
+        document.location.reload = 'localhost:8080';
 
-    function randomNumberGenerator() {
-        rn = Math.floor(Math.random() * Math.floor(Quotes.length));
-        return rn;
-    };
+    });
 
-    // Curren year generator ===================================================
-    function yearGenerator() {
-        $('#year').text(new Date().getFullYear());
-    };
+    $(".change-status").on("click", function (event) {
+        var chore_id = $(this).data("id");
+        var chore_state = $(this).data("chorestate");
+        console.log(chore_id);
+        console.log(chore_state);
+        
+        if (chore_state != 0) {
+            new_chore_state = 0;
+            console.log("should be false " + new_chore_state);
+        } else {
+            new_chore_state = 1;
+            console.log("Should be true " + new_chore_state);
+        }
+        console.log(new_chore_state);
+        var newChore_State = {
+            chore_state: new_chore_state
+        };
+        console.log("here's the chore_id again: " + chore_id);
+        $.ajax({
+            headers: { "Content-type": "application/x-www-form-urlencoded" },
+            url: "api/choreStatus/" + chore_id,
+            type: "PUT",
+            data: newChore_State
+        })
+        // api.newChoreStatus(JSON.stringify(newChore_State, chore_id));
+        console.log(newChore_State);
+        console.log("changed chore_state to", new_chore_state);
+        // Reload the page to get the updated list
+        // location.reload();
 
-    yearGenerator();
+        // Send the PUT request.
+    });
 
 
     var api = {
-        userCreation: function (user) {
+        newChore: function (data) {
             return $.ajax({
                 headers: { "Content-type": "application/json" },
-                url: "api/userCreate",
+                url: "api/newChore",
                 type: "POST",
-                data: user
+                data: data
+            })
+        },
+        newChoreStatus: function (newChore_State, chore_id) {
+            return $.ajax({
+                headers: { "Content-type": "application/json" },
+                url: "api/choreStatus/" + chore_id,
+                type: "PUT",
+                data: newChore_State
             })
         },
         caloriePost: function (data, user_id) {
@@ -142,28 +145,6 @@ $(document).ready(function () {
 
 
     // $(function () {
-
-    //     /////////////// page change button listeners /////////
-
-    //     $('.inputpagelink').click(function () {
-    //         window.location = 'https://fit-or-fatapp.herokuapp.com/input';
-    //     });
-    //     $(".chartspagelink").click(function () {
-    //         // api.userdataGet(user_id);
-    //         window.location = "https://fit-or-fatapp.herokuapp.com/charts";
-    //     });
-    //     $(".homepagelink").click(function () {
-    //         window.location = "https://fit-or-fatapp.herokuapp.com/";
-    //     });
-
-    //     //////// new user modal button listener /////////////
-    //     $("#new-user-bnt").click(function () {
-    //         event.preventDefault();
-    //         $("#new-user-modal").modal("show");
-    //     });
-
-    //     //////////// new user submit button listener //////////////////
-
 
     //     $("#newusermodalbtn").on("click", function () {
     //         event.preventDefault();
