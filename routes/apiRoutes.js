@@ -70,7 +70,7 @@ module.exports = function (app) {
 
     ////////// POSTS ///////////
 
-    // new choir api post
+    // new chore api post
     app.post("/api/newChore", function (req, res) {
         db.Chores.create({
             username: req.body.username,
@@ -92,13 +92,26 @@ module.exports = function (app) {
                 where: { chore_id: req.params.chore_id }
             })
             .then(function (newStatus) {
-                console.log("new chore state is " + req.body.chore_state);
-                console.log("chore_id is " + req.params.chore_id);
-                console.log("result is this new status: " + newStatus);
-                // res.json(newStatus);
+                res.json(newStatus);
             });
     })
+
+    // delete chore //
+    app.delete("/api/choreDelete/:chore_id", function (req, res) {
+        console.log ("deleting chore #" + req.params.chore_id)
+        db.Chores.destroy(
+            {
+                where: { chore_id: req.params.chore_id }
+            })
+            .then(function (choreDeleted) {
+                if (choreDeleted === 1) {
+                    console.log("Chore deleted");
+                }
+            })
+        // res.json(choreDeleted);
+    });
 }
+
 
     // get data for table displays
     // app.get("/api/choresAllGet/:username", function (req, res) {
