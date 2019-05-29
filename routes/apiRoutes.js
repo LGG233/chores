@@ -130,17 +130,16 @@ module.exports = function (app) {
 
     // delete chore //
     app.delete("/api/choreDelete/:chore_id", function (req, res) {
-        console.log ("deleting chore #" + req.params.chore_id)
         db.Chores.destroy(
             {
                 where: { chore_id: req.params.chore_id }
             })
-            .then(function (choreDeleted) {
-                if (choreDeleted === 1) {
+            .then(function (result) {
+                if (result === 1) {
                     console.log("Chore deleted");
                 }
+                res.json(result);
             })
-        // res.json(choreDeleted);
     });
 }
 

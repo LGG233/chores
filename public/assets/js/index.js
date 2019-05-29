@@ -12,17 +12,23 @@ $(document).ready(function () {
     // add chore to db //
     $("#submitNewChore").on("click", function () {
         event.preventDefault();
-        var data = {
+        var newChore = {
             username: $("#inputUserName").val().trim(),
             chore: $("#inputChore").val().trim(),
             overview: $("#inputDescription").val().trim(),
             due_date: $("#inputDate").val().trim()
         };
-        console.log(data);
-        api.newChore(JSON.stringify(data));
-        // window.location = 'localhost:8080';
+        console.log(newChore);
+        // $.ajax({
+        //     headers: { "Content-type": "application/json" },
+        //     url: "api/newChore",
+        //     type: "POST",
+        //     data: newChore
+        api.newChore(JSON.stringify(newChore));
+        // }).then(function (response) {
+        // location.reload();
         $('#new-chore-modal').modal('hide');
-        // document.location.reload = 'localhost:8080';
+        // location.reload();
     });
 
     // get data for editing chore //
@@ -77,16 +83,13 @@ $(document).ready(function () {
     // change status of a chore to done / todo //
     $(".change-status").on("click", function (event) {
         var chore_id = $(this).data("id");
-        console.log(chore_id)
         var chore_state = $(this).data("chorestate");
-        console.log("this is chore# " + chore_id + "'s chore state: " + chore_state);
         if (chore_state != 0) {
             new_chore_state = 0;
         } else {
             new_chore_state = 1;
         }
         var newChore_State = { chore_state: new_chore_state };
-        console.log("this is chore# " + chore_id + "'s new chore state: " + new_chore_state);
         $.ajax({
             headers: { "Content-type": "application/x-www-form-urlencoded" },
             url: "api/choreStatus/" + chore_id,
@@ -113,12 +116,14 @@ $(document).ready(function () {
     });
 
     var api = {
-        newChore: function (data) {
+        newChore: function (newChore) {
             return $.ajax({
                 headers: { "Content-type": "application/json" },
                 url: "api/newChore",
                 type: "POST",
-                data: data
+                data: newChore
+            }).then(function (response) {
+                location.reload();
             })
         },
         getChore: function (chore_id) {
