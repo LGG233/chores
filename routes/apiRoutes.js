@@ -19,6 +19,16 @@ module.exports = function (app) {
             res.json(dbUsers);
         })
     })
+    // get chore to be edited
+    app.get("/api/getChore/:chore_id", function (req, res) {
+        db.Chores.findAll(
+            {
+                where: { chore_id: req.params.chore_id }
+            })
+            .then(function (choreToEdit) {
+                res.json(choreToEdit);
+            });
+    })
 
     // gets list of all chores for single user//
     app.get("/api/choresGet/:username", function (req, res) {
@@ -87,6 +97,28 @@ module.exports = function (app) {
         db.Chores.update(
             {
                 chore_state: req.body.chore_state
+            },
+            {
+                where: { chore_id: req.params.chore_id }
+            })
+            .then(function (newStatus) {
+                res.json(newStatus);
+            });
+    })
+
+    // Edit chore //
+    app.put("/api/choreEdits/:chore_id", function (req, res) {
+        console.log(req.params.chore_id)
+        console.log(req.body.username)
+        console.log(req.body.chore)
+        console.log(req.body.overview)
+        console.log(req.body.due_date)
+        db.Chores.update(
+            {
+                username: req.body.username,
+                chore: req.body.chore,
+                overview: req.body.overview,
+                due_date: req.body.due_date
             },
             {
                 where: { chore_id: req.params.chore_id }

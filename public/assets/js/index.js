@@ -18,22 +18,75 @@ $(document).ready(function () {
             overview: $("#inputDescription").val().trim(),
             due_date: $("#inputDate").val().trim()
         };
+        console.log(data);
         api.newChore(JSON.stringify(data));
-        window.location = 'localhost:8080';
+        // window.location = 'localhost:8080';
         $('#new-chore-modal').modal('hide');
-        document.location.reload = 'localhost:8080';
+        // document.location.reload = 'localhost:8080';
+    });
+
+    // get data for editing chore //
+    $(".edit-chore").on("click", function () {
+        event.preventDefault();
+        var chore_id = $(this).data("id");
+        $.ajax({
+            headers: { "Content-type": "application/x-www-form-urlencoded" },
+            url: "api/getChore/" + chore_id,
+            dataType: "json",
+            type: "GET",
+        }).then(function (result) {
+            console.log(result);
+            var username = result[0].username;
+            var chore = result[0].chore;
+            var overview = result[0].overview;
+            var due_date = result[0].due_date;
+            var chore_id = result[0].chore_id;
+            $('#edit-chore-modal').modal('show')
+            $("#edit-chore-modal #inputEditedUserName").val(username);
+            $("#edit-chore-modal #inputEditedChore").val(chore);
+            $("#edit-chore-modal #inputEditedDescription").val(overview);
+            $("#edit-chore-modal #inputEditedDate").val(due_date);
+            $("#edit-chore-modal #choreID").val(chore_id);
+        });
+    });
+
+    // send edited chore to db //
+    $("#submitEditedChore").on("click", function () {
+        event.preventDefault();
+        var data = {
+            username: $("#inputEditedUserName").val().trim(),
+            chore: $("#inputEditedChore").val().trim(),
+            overview: $("#inputEditedDescription").val().trim(),
+            due_date: $("#inputEditedDate").val().trim()
+        };
+        var chore_id = $("#choreID").val().trim();
+        console.log(data);
+        console.log(chore_id);
+        $('#edit-chore-modal').modal('hide')
+        console.log("modal hidden");
+        $.ajax({
+            headers: { "Content-type": "application/x-www-form-urlencoded" },
+            url: "api/choreEdits/" + chore_id,
+            type: "PUT",
+            data: data
+        }).then(function (result) {
+            location.reload();
+        })
     });
 
     // change status of a chore to done / todo //
     $(".change-status").on("click", function (event) {
         var chore_id = $(this).data("id");
+        console.log(chore_id)
         var chore_state = $(this).data("chorestate");
+        console.log("this is chore# " + chore_id + "'s chore state: " + chore_state);
         if (chore_state != 0) {
             new_chore_state = 0;
         } else {
             new_chore_state = 1;
         }
         var newChore_State = { chore_state: new_chore_state };
+        console.log("this is chore# " + chore_id + "'s new chore state: " + new_chore_state);
         $.ajax({
             headers: { "Content-type": "application/x-www-form-urlencoded" },
             url: "api/choreStatus/" + chore_id,
@@ -57,85 +110,85 @@ $(document).ready(function () {
                 location.reload();
             })
         };
-});
+    });
 
-var api = {
-    newChore: function (data) {
-        return $.ajax({
-            headers: { "Content-type": "application/json" },
-            url: "api/newChore",
-            type: "POST",
-            data: data
-        })
-    },
-    newChoreStatus: function (newChore_State, chore_id) {
-        return $.ajax({
-            headers: { "Content-type": "application/json" },
-            url: "api/choreStatus/" + chore_id,
-            type: "PUT",
-            data: newChore_State
-        })
-    },
-    caloriePost: function (data, user_id) {
-        return $.ajax({
-            headers: { "Content-type": "application/json" },
-            url: "api/caloriePost/" + user_id,
-            type: "POST",
-            data: data
-        })
-    },
-    activityPost: function (data, user_id) {
-        return $.ajax({
-            headers: { "Content-type": "application/json" },
-            url: "api/activityPost/" + user_id,
-            type: "POST",
-            data: data
-        })
-    },
-    userweightPost: function (data, user_id) {
-        return $.ajax({
-            headers: { "Content-type": "application/json" },
-            url: "api/userweightPost/" + user_id,
-            type: "POST",
-            data: data
-        })
-    },
-    activitiesGet: function (user_id) {
-        return $.ajax({
-            headers: { "Content-type": "application/json" },
-            url: "api/activitiesGet/" + user_id,
-            type: "GET"
-        })
-    },
-    caloriesGet: function (user_id) {
-        return $.ajax({
-            headers: { "Content-type": "application/json" },
-            url: "api/caloriesGet/" + user_id,
-            type: "GET",
-        })
-    },
-    userweightGet: function (user_id) {
-        return $.ajax({
-            headers: { "Content-type": "application/json" },
-            url: "api/userweightGet/" + user_id,
-            type: "GET"
-        })
-    },
-    userdataGet: function (user_id) {
-        return $.ajax({
-            headers: { "Content-type": "application/json" },
-            url: "api/userdataGet/" + user_id,
-            type: "GET"
-        })
-    },
-    userGet: function () {
-        return $.ajax({
-            headers: { "Content-type": "application/json" },
-            url: "api/userGet",
-            type: "GET"
-        })
-    }
-};
+    var api = {
+        newChore: function (data) {
+            return $.ajax({
+                headers: { "Content-type": "application/json" },
+                url: "api/newChore",
+                type: "POST",
+                data: data
+            })
+        },
+        getChore: function (chore_id) {
+            return $.ajax({
+                headers: { "Content-type": "application/json" },
+                url: "api/getChore/" + chore_id,
+                type: "GET"
+            })
+        },
+        newChoreStatus: function (newChore_State, chore_id) {
+            return $.ajax({
+                headers: { "Content-type": "application/json" },
+                url: "api/choreStatus/" + chore_id,
+                type: "PUT",
+                data: newChore_State
+            })
+        },
+        caloriePost: function (data, user_id) {
+            return $.ajax({
+                headers: { "Content-type": "application/json" },
+                url: "api/caloriePost/" + user_id,
+                type: "POST",
+                data: data
+            })
+        },
+        activityPost: function (data, user_id) {
+            return $.ajax({
+                headers: { "Content-type": "application/json" },
+                url: "api/activityPost/" + user_id,
+                type: "POST",
+                data: data
+            })
+        },
+        userweightPost: function (data, user_id) {
+            return $.ajax({
+                headers: { "Content-type": "application/json" },
+                url: "api/userweightPost/" + user_id,
+                type: "POST",
+                data: data
+            })
+        },
+        caloriesGet: function (user_id) {
+            return $.ajax({
+                headers: { "Content-type": "application/json" },
+                url: "api/caloriesGet/" + user_id,
+                type: "GET",
+            })
+        },
+        userweightGet: function (user_id) {
+            return $.ajax({
+                headers: { "Content-type": "application/json" },
+                url: "api/userweightGet/" + user_id,
+                type: "GET"
+            })
+        },
+        userdataGet: function (user_id) {
+            return $.ajax({
+                headers: { "Content-type": "application/json" },
+                url: "api/userdataGet/" + user_id,
+                type: "GET"
+            })
+        },
+        userGet: function () {
+            return $.ajax({
+                headers: { "Content-type": "application/json" },
+                url: "api/userGet",
+                type: "GET"
+            })
+        }
+    };
 });
 
 

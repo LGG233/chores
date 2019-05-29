@@ -111,7 +111,7 @@
     </div>
 </div>
 
-<!-- Modal for Editing Chore -->
+<!-- Modal for Edited Chore -->
 <div id="edit-chore-modal" class="modal fade" role="dialog" data-backdrop="static" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -123,30 +123,36 @@
                 <!-- Input validation -->
                 <form id="sign-in-modal-form" class="needs-validation" novalidate>
                     <div class="form-group">
-                        <label for="inputUserName">Who</label>
-                        <input type="text" class="form-control" id="inputUserName" placeholder="Who's gonna do the work"
-                            required>
+                        <label for="inputEditedUserName">Who</label>
+                        <input type="text" class="form-control" id="inputEditedUserName"required>
                         <div class="invalid-feedback">
                             Please enter a name - Dad, Maman, Rémi, or Juliette
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="inputChore">What</label>
-                        <input type="text" class="form-control" id="inputChore" placeholder="What are they gonna do"
+                        <label for="inputEditedChore">What</label>
+                        <input type="text" class="form-control" id="inputEditedChore" placeholder="What are they gonna do"
                             required>
                         <div class="invalid-feedback">
                             Please enter the chore
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="inputDescription">How</label>
-                        <input type="text" class="form-control" id="inputDescription" placeholder="Tell us about it">
+                        <label for="inputEditedDescription">How</label>
+                        <input type="text" class="form-control" id="inputEditedDescription" placeholder="Tell us about it">
                     </div>
                     <div class="form-group">
-                        <label for="inputDate">When</label>
-                        <input type="date" class="form-control" id="inputDate" placeholder="2019-01-01" required>
+                        <label for="inputEditedDate">When</label>
+                        <input type="date" class="form-control" id="inputEditedDate" placeholder="2019-01-01" required>
                         <div class="invalid-feedback">
                             Please enter a due date
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="choreID">Chore ID</label>
+                        <input type="text" class="form-control" id="choreID" required>
+                        <div class="invalid-feedback">
+                            Please re-enter the Chore ID
                         </div>
                     </div>
                     <button id="submitEditedChore" type="submit" class="btn btn-primary btn-block">Submit</button>
