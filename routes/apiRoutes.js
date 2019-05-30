@@ -4,7 +4,9 @@ module.exports = function (app) {
 
     // gets list of all chores for all users  //
     app.get("/", function (req, res) {
-        db.Chores.findAll({}).then(function (dbChores) {
+        db.Chores.findAll({
+            order: [['due_date']],
+        }).then(function (dbChores) {
             var hbsObject = {
                 Chores: dbChores
             };

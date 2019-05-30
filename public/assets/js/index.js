@@ -140,58 +140,6 @@ $(document).ready(function () {
                 type: "PUT",
                 data: newChore_State
             })
-        },
-        caloriePost: function (data, user_id) {
-            return $.ajax({
-                headers: { "Content-type": "application/json" },
-                url: "api/caloriePost/" + user_id,
-                type: "POST",
-                data: data
-            })
-        },
-        activityPost: function (data, user_id) {
-            return $.ajax({
-                headers: { "Content-type": "application/json" },
-                url: "api/activityPost/" + user_id,
-                type: "POST",
-                data: data
-            })
-        },
-        userweightPost: function (data, user_id) {
-            return $.ajax({
-                headers: { "Content-type": "application/json" },
-                url: "api/userweightPost/" + user_id,
-                type: "POST",
-                data: data
-            })
-        },
-        caloriesGet: function (user_id) {
-            return $.ajax({
-                headers: { "Content-type": "application/json" },
-                url: "api/caloriesGet/" + user_id,
-                type: "GET",
-            })
-        },
-        userweightGet: function (user_id) {
-            return $.ajax({
-                headers: { "Content-type": "application/json" },
-                url: "api/userweightGet/" + user_id,
-                type: "GET"
-            })
-        },
-        userdataGet: function (user_id) {
-            return $.ajax({
-                headers: { "Content-type": "application/json" },
-                url: "api/userdataGet/" + user_id,
-                type: "GET"
-            })
-        },
-        userGet: function () {
-            return $.ajax({
-                headers: { "Content-type": "application/json" },
-                url: "api/userGet",
-                type: "GET"
-            })
         }
     };
 });
