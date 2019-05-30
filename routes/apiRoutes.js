@@ -1,7 +1,6 @@
 var db = require("../models");
 
 module.exports = function (app) {
-
     // gets list of all chores for all users  //
     app.get("/", function (req, res) {
         db.Chores.findAll({
@@ -10,18 +9,27 @@ module.exports = function (app) {
             var hbsObject = {
                 Chores: dbChores
             };
+            console.log(dbChores);
+            console.log(hbsObject);
             res.render("index", hbsObject);
         })
     })
-    // gets list of all users //
-    app.get("/api/allUsersGet", function (req, res) {
-        db.Users.findAll({
-            order: [['createdAt', 'DESC']],
-        }).then(function (dbUsers) {
-            res.json(dbUsers);
-        })
+    // get list of specific user's chores 
+    app.get("/api/getChore/:username", function (req, res) {
+        db.Chores.findAll({
+            where: { username: req.params.username }
+        }).then(function (userChores) {
+            var hbsObject = {
+                Chores: userChores
+            };
+            console.log(userChores);
+            console.log(hbsObject);
+            res.json(userChores);
+
+            // res.render("layouts/user", hbsObject);
+        });
     })
-    // get chore to be edited
+
     app.get("/api/getChore/:chore_id", function (req, res) {
         db.Chores.findAll(
             {
@@ -35,15 +43,17 @@ module.exports = function (app) {
     // gets list of all chores for single user//
     app.get("/api/choresGet/:username", function (req, res) {
         db.Chores.findAll({
-            order: [['createdAt', 'DESC']],
+            order: [['due_date']],
             where: {
                 username: req.params.username,
             }
         }).then(function (dbChores) {
-            var hbsObject = {
-                Chores: dbChores
-            };
-            res.render("index", hbsObject);
+            res.json(dbChores);
+
+            // var hbsObject = {
+            //     Chores: dbChores
+            // };
+            // res.render("index", hbsObject);
         });
     });
 

@@ -115,6 +115,17 @@ $(document).ready(function () {
         };
     });
 
+    // User chore list // 
+    $(".user-chores").on("click", function (event) {
+        var username = $(this).data("name");
+        $.ajax({
+            headers: { "Content-type": "application/x-www-form-urlencoded" },
+            url: "api/getChore/" + username,
+            dataType: "json",
+            type: "GET"
+        })
+    });
+ 
     var api = {
         newChore: function (newChore) {
             return $.ajax({
