@@ -15,21 +15,30 @@ module.exports = function (app) {
         })
     })
     // get list of specific user's chores 
-    app.get("/api/getChore/:username", function (req, res) {
+    app.get("/chores/:username", function (req, res) {
         db.Chores.findAll({
-            where: { username: req.params.username }
-        }).then(function (userChores) {
+            order: [['due_date']],
+            where: {
+                username: req.params.username,
+            }
+        }).then(function (dbChores) {
             var hbsObject = {
-                Chores: userChores
+                Chores: dbChores
             };
-            console.log(userChores);
-            console.log(hbsObject);
-            res.json(userChores);
+            res.render("index", hbsObject);
+            // res.json(hbsObject);
+            // res.status(status).send(body)
 
-            // res.render("layouts/user", hbsObject);
+            // console.log(dbChores);
+            // console.log(hbsObject);
+            // res.json(userChores);
+            // console.log("next I'm going to re-render the handlebars document")
+            // ("index").reload(hbsObject);
+            // console.log(dbChores[0].chore)
+            // console.log("I DID re-render the main document")
         });
     })
-
+    
     app.get("/api/getChore/:chore_id", function (req, res) {
         db.Chores.findAll(
             {
@@ -39,23 +48,6 @@ module.exports = function (app) {
                 res.json(choreToEdit);
             });
     })
-
-    // gets list of all chores for single user//
-    app.get("/api/choresGet/:username", function (req, res) {
-        db.Chores.findAll({
-            order: [['due_date']],
-            where: {
-                username: req.params.username,
-            }
-        }).then(function (dbChores) {
-            res.json(dbChores);
-
-            // var hbsObject = {
-            //     Chores: dbChores
-            // };
-            // res.render("index", hbsObject);
-        });
-    });
 
     // // gets list of uncompleted chores for user //
     app.get("/api/choresTodoGet/:username", function (req, res) {
@@ -154,36 +146,3 @@ module.exports = function (app) {
             })
     });
 }
-
-
-    // get data for table displays
-    // app.get("/api/choresAllGet/:username", function (req, res) {
-    //     var chores_todo_hbsObject = [];
-    //     var chores_done_hbsObject = [];
-    //     var chores_all = []
-    //     db.Chores.findAll({
-    //         order: [['createdAt', 'DESC']],
-    //         where: {
-    //             username: req.params.username,
-    //             chore_state: false
-    //         }
-    //     }).then(function (data) {
-    //         for (var i = 0; i < data.length; i++) {
-    //             chores_todo_hbsObject.push(data[i]);
-    //         }
-    //         chores_all.push(chores_todo_hbsObject);
-    //     });
-    //     db.Chores.findAll({
-    //         order: [['createdAt', 'DESC']],
-    //         where: {
-    //             username: req.params.username,
-    //             chore_state: true
-    //         }
-    //     }).then(function (data) {
-    //         for (var i = 0; i < data.length; i++) {
-    //             chores_done_hbsObject.push(data[i]);
-    //         }
-    //         chores_all.push(chores_done_hbsObject);
-    //         res.json(chores_all);
-    //     });
-    // });

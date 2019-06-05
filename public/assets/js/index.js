@@ -19,16 +19,8 @@ $(document).ready(function () {
             due_date: $("#inputDate").val().trim()
         };
         console.log(newChore);
-        // $.ajax({
-        //     headers: { "Content-type": "application/json" },
-        //     url: "api/newChore",
-        //     type: "POST",
-        //     data: newChore
         api.newChore(JSON.stringify(newChore));
-        // }).then(function (response) {
-        // location.reload();
         $('#new-chore-modal').modal('hide');
-        // location.reload();
     });
 
     // get data for editing chore //
@@ -41,7 +33,6 @@ $(document).ready(function () {
             dataType: "json",
             type: "GET",
         }).then(function (result) {
-            console.log(result);
             var username = result[0].username;
             var chore = result[0].chore;
             var overview = result[0].overview;
@@ -66,10 +57,7 @@ $(document).ready(function () {
             due_date: $("#inputEditedDate").val().trim()
         };
         var chore_id = $("#choreID").val().trim();
-        console.log(data);
-        console.log(chore_id);
         $('#edit-chore-modal').modal('hide')
-        console.log("modal hidden");
         $.ajax({
             headers: { "Content-type": "application/x-www-form-urlencoded" },
             url: "api/choreEdits/" + chore_id,
@@ -117,15 +105,32 @@ $(document).ready(function () {
 
     // User chore list // 
     $(".user-chores").on("click", function (event) {
+        event.preventDefault();
+        // $("#main-container").empty();
         var username = $(this).data("name");
-        $.ajax({
-            headers: { "Content-type": "application/x-www-form-urlencoded" },
-            url: "api/getChore/" + username,
-            dataType: "json",
-            type: "GET"
-        })
+        window.location.assign("chores/" + username);
     });
- 
+
+    // All chore list // 
+    $(".all-chores").on("click", function (event) {
+        event.preventDefault();
+        $("#main-container").empty();
+        // var username = $(this).data("name");
+        window.location.assign("/");
+    });
+
+        // $.ajax({
+        //     headers: { "Content-type": "application/x-www-form-urlencoded" },
+        //     url: "api/getChores/" + username,
+        //     dataType: "json",
+        //     type: "GET"
+        // }).then(function (response) {
+        //     console.log("this is the response from the back end:")
+        //     console.log(response);
+        //     $("#handlebars-table").html(response.chores)
+        // $("#main-container").text(response);
+        // location.reload();
+
     var api = {
         newChore: function (newChore) {
             return $.ajax({
