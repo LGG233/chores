@@ -2,7 +2,30 @@
     <h1 class="display-4">Get to Work!</h1>
     <h4 classs="lead">The family chore app</h4>
 </div>
-{{>table-body}}
+<div class="main-buttons ">
+    <div class="container main-body">
+        <div class="row center-btns">
+            <button type="button" id="new-chore-btn" class="btn btn-primary btn-sm">Add New Chore</button>
+            <button type="button" class="user-chores btn btn-primary btn-sm" data-name="Dad">Dad's Chores</button>
+            <button type="button" class="user-chores btn btn-primary btn-sm" data-name="Maman">Maman's Chores</button>
+            <button type="button" class="user-chores btn btn-primary btn-sm" data-name="Rémi">Rémi's Chores</button>
+            <button type="button" class="user-chores btn btn-primary btn-sm" data-name="Juliette">Juliette's
+                Chores</button>
+            <button type="button" class="all-chores btn btn-primary btn-sm">All Chores</button>
+        </div>
+        {{>table-body}}
+        <br>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+    </div>
+</div>
 <!-- Modal for New Chore -->
 <div id="new-chore-modal" class="modal fade" role="dialog" data-backdrop="static" tabindex="-1">
     <div class="modal-dialog">
@@ -61,22 +84,23 @@
                 <form id="sign-in-modal-form" class="needs-validation" novalidate>
                     <div class="form-group">
                         <label for="inputEditedUserName">Who</label>
-                        <input type="text" class="form-control" id="inputEditedUserName"required>
+                        <input type="text" class="form-control" id="inputEditedUserName" required>
                         <div class="invalid-feedback">
                             Please enter a name - Dad, Maman, Rémi, or Juliette
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="inputEditedChore">What</label>
-                        <input type="text" class="form-control" id="inputEditedChore" placeholder="What are they gonna do"
-                            required>
+                        <input type="text" class="form-control" id="inputEditedChore"
+                            placeholder="What are they gonna do" required>
                         <div class="invalid-feedback">
                             Please enter the chore
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="inputEditedDescription">How</label>
-                        <input type="text" class="form-control" id="inputEditedDescription" placeholder="Tell us about it">
+                        <input type="text" class="form-control" id="inputEditedDescription"
+                            placeholder="Tell us about it">
                     </div>
                     <div class="form-group">
                         <label for="inputEditedDate">When</label>
@@ -95,20 +119,6 @@
                     <button id="submitEditedChore" type="submit" class="btn btn-primary btn-block">Submit</button>
                 </form>
             </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="main-buttons ">
-    <div class="container">
-        <div class="row center-btns">
-            <button type="button" id="new-chore-btn" class="btn btn-primary btn-sm">Add New Chore</button>
-            <button type="button" class="user-chores btn btn-primary btn-sm" data-name="Dad">Dad's Chores</button>
-            <button type="button" class="user-chores btn btn-primary btn-sm" data-name="Maman">Maman's Chores</button>
-            <button type="button" class="user-chores btn btn-primary btn-sm" data-name="Rémi">Rémi's Chores</button>
-            <button type="button" class="user-chores btn btn-primary btn-sm" data-name="Juliette">Juliette's Chores</button>
-            <button type="button" class="all-chores btn btn-primary btn-sm">All Chores</button>
         </div>
     </div>
 </div>

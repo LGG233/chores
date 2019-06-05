@@ -12,13 +12,17 @@ body {
 }
 .text-box {
     background-color: blanchedalmond;
-    opacity: 0.75;
+    opacity: 0.80;
 }
 
 .center-btns {
     display: block;
-    margin: auto;
+    margin: auto auto 20px auto;
     text-align: center;
     padding: 4px;
     font-size: 20px;
+}
+
+.main-body {
+    margin: auto;
 }
