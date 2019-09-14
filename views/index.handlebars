@@ -1,17 +1,19 @@
-<div class="jumbotron banner red-carpet text-center">
-    <h1 class="display-4">Get to Work!</h1>
-    <h4 classs="lead">The family chore app</h4>
-</div>
+{{>header}}
+
 <div class="main-buttons ">
     <div class="container main-body">
         <div class="row center-btns">
+            <button type="button" id="logout-btn" class="btn btn-primary btn-sm">Logout</button>
             <button type="button" id="new-chore-btn" class="btn btn-primary btn-sm">Add New Chore</button>
-            <button type="button" class="user-chores btn btn-primary btn-sm" data-name="Dad">Dad's Chores</button>
+
+            {{!-- <button type="button" id="new-user-btn" class="btn btn-primary btn-sm">Add New User</button> --}}
+            {{!-- <button type="button" id="new-chore-btn" class="btn btn-primary btn-sm">Add New Chore</button> --}}
+            {{!-- <button type="button" class="user-chores btn btn-primary btn-sm" data-name="Dad">Dad's Chores</button>
             <button type="button" class="user-chores btn btn-primary btn-sm" data-name="Maman">Maman's Chores</button>
             <button type="button" class="user-chores btn btn-primary btn-sm" data-name="Rémi">Rémi's Chores</button>
             <button type="button" class="user-chores btn btn-primary btn-sm" data-name="Juliette">Juliette's
                 Chores</button>
-            <button type="button" class="all-chores btn btn-primary btn-sm">All Chores</button>
+            <button type="button" class="all-chores btn btn-primary btn-sm">All Chores</button> --}}
         </div>
         {{>table-body}}
         <br>

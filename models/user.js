@@ -32,20 +32,3 @@ module.exports = function (sequelize, DataTypes) {
   });
   return Users;
 };
-
-// Users.beforeCreate((users, options) => {
-//   const salt = bcrypt.genSaltSync();
-//   users.password = bcrypt.hashSync(users.password, salt);
-// });
-
-// Users.prototype.validPassword = function (password) {
-//   return bcrypt.compareSynch(password, this.password);
-// };
-
-// // create all defined tables in the specified db
-
-// sequelize.sync()
-//   .then(() => console.log("user tables has been successfully created if one does not exist"))
-//   .catch(error => console.log("this error occured", error));
-
-// module.exports = Users;

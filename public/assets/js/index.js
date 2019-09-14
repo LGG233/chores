@@ -1,3 +1,5 @@
+// var bcrypt = require("bcrypt");
+
 $(document).ready(function () {
     $('#new-chore-btn').click(function () {
         event.preventDefault();
@@ -7,6 +9,16 @@ $(document).ready(function () {
     $('#edit-chore-btn').click(function () {
         event.preventDefault();
         $('#edit-chore-modal').modal('show');
+    });
+
+    $('#register-btn').click(function () {
+        event.preventDefault();
+        $('#new-user-modal').modal('show');
+    });
+
+    $('#login-btn').click(function () {
+        event.preventDefault();
+        $('#login-modal').modal('show');
     });
 
     // add chore to db //
@@ -21,6 +33,19 @@ $(document).ready(function () {
         console.log(newChore);
         api.newChore(JSON.stringify(newChore));
         $('#new-chore-modal').modal('hide');
+    });
+
+    // add user to db //
+    $("#submitNewUser").on("click", function () {
+        event.preventDefault();
+        var newUser = {
+            username: $("#username").val().trim(),
+            email: $("#email").val().trim(),
+            password: $("#password").val().trim()
+        };
+        console.log(newUser);
+        api.newUser(JSON.stringify(newUser));
+        $('#new-user-modal').modal('hide');
     });
 
     // get data for editing chore //
@@ -108,7 +133,7 @@ $(document).ready(function () {
         event.preventDefault();
         // $("#main-container").empty();
         var username = $(this).data("name");
-        window.location.assign("chores/" + username);
+        window.location.assign("http://localhost:8080/chores/" + username);
     });
 
     // All chore list // 
@@ -119,17 +144,17 @@ $(document).ready(function () {
         window.location.assign("/");
     });
 
-        // $.ajax({
-        //     headers: { "Content-type": "application/x-www-form-urlencoded" },
-        //     url: "api/getChores/" + username,
-        //     dataType: "json",
-        //     type: "GET"
-        // }).then(function (response) {
-        //     console.log("this is the response from the back end:")
-        //     console.log(response);
-        //     $("#handlebars-table").html(response.chores)
-        // $("#main-container").text(response);
-        // location.reload();
+    // $.ajax({
+    //     headers: { "Content-type": "application/x-www-form-urlencoded" },
+    //     url: "api/getChores/" + username,
+    //     dataType: "json",
+    //     type: "GET"
+    // }).then(function (response) {
+    //     console.log("this is the response from the back end:")
+    //     console.log(response);
+    //     $("#handlebars-table").html(response.chores)
+    // $("#main-container").text(response);
+    // location.reload();
 
     var api = {
         newChore: function (newChore) {
@@ -138,6 +163,16 @@ $(document).ready(function () {
                 url: "api/newChore",
                 type: "POST",
                 data: newChore
+            }).then(function (response) {
+                location.reload();
+            })
+        },
+        newUser: function (newUser) {
+            return $.ajax({
+                headers: { "Content-type": "application/json" },
+                url: "api/newUser",
+                type: "POST",
+                data: newUser
             }).then(function (response) {
                 location.reload();
             })

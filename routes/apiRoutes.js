@@ -1,6 +1,14 @@
 var db = require("../models");
+var bcrypt = require("bcrypt");
+const saltRounds = 10;
+
 
 module.exports = function (app) {
+    // gets landing page //
+    app.get('/home', function (req, res, next) {
+        res.render('home', { title: 'Welcome' });
+    });
+
     // gets list of all chores for all users  //
     app.get("/", function (req, res) {
         db.Chores.findAll({
@@ -26,19 +34,9 @@ module.exports = function (app) {
                 Chores: dbChores
             };
             res.render("index", hbsObject);
-            // res.json(hbsObject);
-            // res.status(status).send(body)
-
-            // console.log(dbChores);
-            // console.log(hbsObject);
-            // res.json(userChores);
-            // console.log("next I'm going to re-render the handlebars document")
-            // ("index").reload(hbsObject);
-            // console.log(dbChores[0].chore)
-            // console.log("I DID re-render the main document")
         });
     })
-    
+
     app.get("/api/getChore/:chore_id", function (req, res) {
         db.Chores.findAll(
             {
@@ -82,7 +80,49 @@ module.exports = function (app) {
     });
 
 
-    ////////// POSTS ///////////
+    ////////// POST ///////////
+
+    // new user api post
+    app.post("/api/newUser", function (req, res) {
+        db.Users.count({ where: { username: req.body.username } })
+            .then(result => {
+                console.log(result)
+                if (result > 0) {
+                    console.log('Duplicate username. Please log in or try again.');
+                    res.render("error", { title: 'Duplicate username. Please log in or try again.' });
+                    return
+                } else if (req.body.username === "") {
+                    console.log('Username cannot be blank. Please try again.');
+                    res.render('error', { title: 'Username is required.' });
+                    return
+                } else if (req.body.email === "") {
+                    console.log('Email cannot be blank. Please try again.');
+                    res.render('error', { title: 'Email is required.' });
+                    return
+                } else if (req.body.password.length < 8) {
+                    console.log('Password too short. Please try again with a password of at least eight characters.');
+                    res.render('error', { title: 'Password too short. Please try again.' });
+                    return
+                    // } else if (req.body.password !== req.body.passwordMatch) {
+                    //     console.log('Passwords do not match. Please try again.');
+                    //     res.render('error', { title: 'Passwords do not match. Please try again.' });
+                    //     return
+                } else {
+                    bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
+                        db.Users.create({
+                            username: req.body.username,
+                            email: req.body.email,
+                            password: hash,
+                        }).then(function (error, results) {
+                            if (error) throw error;
+                            // console.log(results);
+
+                            // res.json(dbNewUser);
+                        });
+                    })
+                };
+            });
+    });
 
     // new chore api post
     app.post("/api/newChore", function (req, res) {
@@ -95,6 +135,8 @@ module.exports = function (app) {
             res.json(dbNewChore);
         });
     });
+
+    ////////// PUT ///////////
 
     // Change status of chore to "done" //
     app.put("/api/choreStatus/:chore_id", function (req, res) {
@@ -131,6 +173,8 @@ module.exports = function (app) {
                 res.json(newStatus);
             });
     })
+
+    ////////// DELETE ///////////
 
     // delete chore //
     app.delete("/api/choreDelete/:chore_id", function (req, res) {

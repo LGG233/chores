@@ -10,6 +10,10 @@ body {
     color: black;
     text-shadow: 10px;
 }
+.home-text {
+    color: white;
+    text-shadow: 10px;
+}
 .text-box {
     background-color: blanchedalmond;
     opacity: 0.80;

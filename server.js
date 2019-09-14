@@ -2,15 +2,24 @@
 var express = require("express");
 var exphbs = require("express-handlebars");
 var bodyParser = require("body-parser");
+var cookieParser = require("cookie-parser");
+// var morgan = require("morgan");
+var session = require("express-session");
+// var Users = require("./models/users");
+var passport = require("passport");
+// var bcrypt = require("bcrypt");
+
+
 
 var db = require("./models");
 
 var app = express();
 var PORT = process.env.PORT || 8080;
 
-app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static("public"));
+app.use(cookieParser());
 
 
 // Handlebars
@@ -35,8 +44,8 @@ if (process.env.NODE_ENV === "test") {
 }
 
 // Starting the server, syncing our models ------------------------------------/
-db.sequelize.sync(syncOptions).then(function() {
-  app.listen(PORT, function() {
+db.sequelize.sync(syncOptions).then(function () {
+  app.listen(PORT, function () {
     console.log(
       "==> 🌎  Listening on port %s. Visit http://localhost:%s/ in your browser.",
       PORT,
