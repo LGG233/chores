@@ -38,10 +38,12 @@ $(document).ready(function () {
     // add user to db //
     $("#submitNewUser").on("click", function () {
         event.preventDefault();
+        console.log("clicked");
         var newUser = {
             username: $("#username").val().trim(),
             email: $("#email").val().trim(),
-            password: $("#password").val().trim()
+            password: $("#password").val().trim(),
+            passwordMatch: $("#passwordMatch").val().trim()
         };
         console.log(newUser);
         api.newUser(JSON.stringify(newUser));

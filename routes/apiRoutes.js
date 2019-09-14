@@ -103,21 +103,20 @@ module.exports = function (app) {
                     console.log('Password too short. Please try again with a password of at least eight characters.');
                     res.render('error', { title: 'Password too short. Please try again.' });
                     return
-                    // } else if (req.body.password !== req.body.passwordMatch) {
-                    //     console.log('Passwords do not match. Please try again.');
-                    //     res.render('error', { title: 'Passwords do not match. Please try again.' });
-                    //     return
+                } else if (req.body.password != req.body.passwordMatch) {
+                    console.log('Passwords do not match. Please try again.');
+                    console.log(req.body.password);
+                    console.log(req.body.passwordMatch);
+                    res.render('error', { title: 'Passwords do not match. Please try again.' });
+                    return
                 } else {
                     bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
                         db.Users.create({
                             username: req.body.username,
                             email: req.body.email,
                             password: hash,
-                        }).then(function (error, results) {
-                            if (error) throw error;
-                            // console.log(results);
-
-                            // res.json(dbNewUser);
+                        }).then(function (results) {
+                            console.log(results.dataValues.username);
                         });
                     })
                 };
