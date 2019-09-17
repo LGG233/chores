@@ -1,39 +1,35 @@
 var db = require("../models");
 var bcrypt = require("bcrypt");
 const saltRounds = 10;
+var passport = require("passport");
 
 
 module.exports = function (app) {
     // gets landing page //
-    app.get('/home', function (req, res, next) {
-        res.render('home', { title: 'Welcome' });
+    app.get('/landing', function (req, res, next) {
+        console.log("on '/' " + req.user);
+        console.log("on '/' " + req.isAuthenticated());
+        res.render('landing', { title: 'Welcome' });
     });
 
-    // gets list of all chores for all users  //
-    app.get("/", function (req, res) {
+    // gets home page if logged in //
+    app.get('/', authenticationMiddleware(), function (req, res, next) {
+        console.log("on '/' " + req.user);
+        console.log("on '/' " + req.isAuthenticated());
+        res.redirect('/home');
+    });
+
+    // gets main page//
+    app.get('/home', authenticationMiddleware(), function (req, res) {
+        console.log("on 'home' " + req.user);
+        console.log("on 'home' " + req.isAuthenticated());
         db.Chores.findAll({
-            order: [['due_date']],
+            order: [['due_date']]
         }).then(function (dbChores) {
             var hbsObject = {
                 Chores: dbChores
             };
-            console.log(dbChores);
-            console.log(hbsObject);
-            res.render("index", hbsObject);
-        })
-    })
-    // get list of specific user's chores 
-    app.get("/chores/:username", function (req, res) {
-        db.Chores.findAll({
-            order: [['due_date']],
-            where: {
-                username: req.params.username,
-            }
-        }).then(function (dbChores) {
-            var hbsObject = {
-                Chores: dbChores
-            };
-            res.render("index", hbsObject);
+            res.render('home', hbsObject);
         });
     })
 
@@ -59,7 +55,7 @@ module.exports = function (app) {
             var hbsObject = {
                 Chores: dbChores
             };
-            res.render("index", hbsObject);
+            res.render("home", hbsObject);
         });
     });
 
@@ -75,7 +71,7 @@ module.exports = function (app) {
             var hbsObject = {
                 Chores: dbChores
             };
-            res.render("index", hbsObject);
+            res.render("home", hbsObject);
         });
     });
 
@@ -105,8 +101,6 @@ module.exports = function (app) {
                     return
                 } else if (req.body.password != req.body.passwordMatch) {
                     console.log('Passwords do not match. Please try again.');
-                    console.log(req.body.password);
-                    console.log(req.body.passwordMatch);
                     res.render('error', { title: 'Passwords do not match. Please try again.' });
                     return
                 } else {
@@ -116,7 +110,11 @@ module.exports = function (app) {
                             email: req.body.email,
                             password: hash,
                         }).then(function (results) {
-                            console.log(results.dataValues.username);
+                            const user_id = results.dataValues.user_id;
+                            console.log(user_id);
+                            req.login(user_id, function (err) {
+                                res.redirect('/home')
+                            })
                         });
                     })
                 };
@@ -188,4 +186,22 @@ module.exports = function (app) {
                 res.json(result);
             })
     });
+
+}
+
+passport.serializeUser(function (user_id, done) {
+    done(null, user_id);
+});
+
+passport.deserializeUser(function (user_id, done) {
+    done(null, user_id);
+});
+
+
+function authenticationMiddleware() {
+    return (req, res, next) => {
+        console.log(`req.session.passport.user: ${JSON.stringify(req.session.passport)}`);
+        if (req.isAuthenticated()) return next();
+        res.redirect('/landing')
+    }
 }

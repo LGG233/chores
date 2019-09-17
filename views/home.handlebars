@@ -1,80 +1,125 @@
-{{> header }}
-<div class="container home-text">
+{{>header}}
 
-    <h1>{{title}}</h1>
-    <p>Please login or register</p>
+{{title}}
+<div class="main-buttons ">
+    <div class="container main-body">
+        <div class="row center-btns">
+            <button type="button" id="logout-btn" class="btn btn-primary btn-sm">Logout</button>
+            <button type="button" id="new-chore-btn" class="btn btn-primary btn-sm">Add New Chore</button>
 
-    <button type="button" id="login-btn" class="btn btn-primary btn-sm">Login</button>
-    <button type="button" id="register-btn" class="btn btn-primary btn-sm">Register</button>
+            {{!-- <button type="button" id="new-user-btn" class="btn btn-primary btn-sm">Add New User</button> --}}
+            {{!-- <button type="button" id="new-chore-btn" class="btn btn-primary btn-sm">Add New Chore</button> --}}
+            {{!-- <button type="button" class="user-chores btn btn-primary btn-sm" data-name="Dad">Dad's Chores</button>
+            <button type="button" class="user-chores btn btn-primary btn-sm" data-name="Maman">Maman's Chores</button>
+            <button type="button" class="user-chores btn btn-primary btn-sm" data-name="Rémi">Rémi's Chores</button>
+            <button type="button" class="user-chores btn btn-primary btn-sm" data-name="Juliette">Juliette's
+                Chores</button>
+            <button type="button" class="all-chores btn btn-primary btn-sm">All Chores</button> --}}
+        </div>
+        {{>table-body}}
+        <br>
+    </div>
 </div>
-
-<!-- Modal for New User -->
-<div id="new-user-modal" class="modal fade" role="dialog" data-backdrop="static" tabindex="-1">
+<div class="container">
+    <div class="row">
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+    </div>
+</div>
+<!-- Modal for New Chore -->
+<div id="new-chore-modal" class="modal fade" role="dialog" data-backdrop="static" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Register</h5>
+                <h5 class="modal-title">New Chore</h5>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
                 <!-- Input validation -->
-                <form id="new-user-modal-form" class="needs-validation" novalidate>
+                <form id="sign-in-modal-form" class="needs-validation" novalidate>
                     <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" class="form-control" id="username" placeholder="Please enter a username"
+                        <label for="inputUserName">Who</label>
+                        <input type="text" class="form-control" id="inputUserName" placeholder="Who's gonna do the work"
                             required>
                         <div class="invalid-feedback">
-                            Your username
+                            Please enter a name
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="inputChore">Email</label>
-                        <input type="email" class="form-control" id="email" placeholder="youremail@domain.com" required>
+                        <label for="inputChore">What</label>
+                        <input type="text" class="form-control" id="inputChore" placeholder="What are they gonna do"
+                            required>
                         <div class="invalid-feedback">
-                            Your email
+                            Please enter the chore
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="inputDescription">Your password</label>
-                        <input type="password" class="form-control" id="password" placeholder="Create a password">
-                        <div class="invalid-feedback">
-                            Password must be at least eight characters
-                        </div>
+                        <label for="inputDescription">How</label>
+                        <input type="text" class="form-control" id="inputDescription" placeholder="Tell us about it">
                     </div>
                     <div class="form-group">
-                        <label for="passwordMatch">Re-enter password</label>
-                        <input type="password" class="form-control" id="passwordMatch" placeholder="Re-type password">
+                        <label for="inputDate">When</label>
+                        <input type="date" class="form-control" id="inputDate" placeholder="2019-01-01" required>
                         <div class="invalid-feedback">
-                            Passwords must match
+                            Please enter a due date
                         </div>
                     </div>
-                    <button id="submitNewUser" type="submit" class="btn btn-primary btn-block">Submit</button>
+                    <button id="submitNewChore" type="submit" class="btn btn-primary btn-block">Submit</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Modal for Login -->
-<div id="login-modal" class="modal fade" role="dialog" data-backdrop="static" tabindex="-1">
+<!-- Modal for Edited Chore -->
+<div id="edit-chore-modal" class="modal fade" role="dialog" data-backdrop="static" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Login</h5>
+                <h5 class="modal-title">Edit Chore</h5>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
                 <!-- Input validation -->
-                <form id="login-modal-form" class="needs-validation" novalidate>
+                <form id="sign-in-modal-form" class="needs-validation" novalidate>
                     <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" class="form-control" id="username" placeholder="Enter your username">
+                        <label for="inputEditedUserName">Who</label>
+                        <input type="text" class="form-control" id="inputEditedUserName" required>
+                        <div class="invalid-feedback">
+                            Please enter a name - Dad, Maman, Rémi, or Juliette
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" class="form-control" id="password" placeholder="Enter password">
+                        <label for="inputEditedChore">What</label>
+                        <input type="text" class="form-control" id="inputEditedChore"
+                            placeholder="What are they gonna do" required>
+                        <div class="invalid-feedback">
+                            Please enter the chore
+                        </div>
                     </div>
-                    <button id="loginUser" type="submit" class="btn btn-primary btn-block">Submit</button>
+                    <div class="form-group">
+                        <label for="inputEditedDescription">How</label>
+                        <input type="text" class="form-control" id="inputEditedDescription"
+                            placeholder="Tell us about it">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEditedDate">When</label>
+                        <input type="date" class="form-control" id="inputEditedDate" placeholder="2019-01-01" required>
+                        <div class="invalid-feedback">
+                            Please enter a due date
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="choreID">Chore ID</label>
+                        <input type="text" class="form-control" id="choreID" required>
+                        <div class="invalid-feedback">
+                            Please re-enter the Chore ID
+                        </div>
+                    </div>
+                    <button id="submitEditedChore" type="submit" class="btn btn-primary btn-block">Submit</button>
                 </form>
             </div>
         </div>

@@ -3,23 +3,50 @@ var express = require("express");
 var exphbs = require("express-handlebars");
 var bodyParser = require("body-parser");
 var cookieParser = require("cookie-parser");
-// var morgan = require("morgan");
+var logger = require('morgan');
+require('dotenv').config()
+
+// Authentication packages
 var session = require("express-session");
-// var Users = require("./models/users");
 var passport = require("passport");
-// var bcrypt = require("bcrypt");
-
-
+var LocalStrategy = require('passport-local').Strategy;
+var MySQLStore = require('express-mysql-session')(session);
+var bcrypt = require('bcrypt');
 
 var db = require("./models");
 
 var app = express();
 var PORT = process.env.PORT || 8080;
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(express.static("public"));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(express.static("public"));
+
+var options = {
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  host: process.env.DB_HOST
+
+  // host: process.env.DB_HOST,
+  // user: process.env.DB_USER,
+  // password: process.env.DB_PASSWORD,
+  // database: process.env.DB_NAME
+};
+
+var sessionStore = new MySQLStore(options);
+
+app.use(session({
+  secret: 'poaiewproiual',
+  resave: false,
+  store: sessionStore,
+  saveUninitialized: false,
+  // cookie: { secure: true }
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 // Handlebars
@@ -53,5 +80,7 @@ db.sequelize.sync(syncOptions).then(function () {
     );
   });
 });
+
+
 
 module.exports = app;
