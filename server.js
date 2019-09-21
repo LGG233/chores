@@ -48,6 +48,39 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+// app.use('/', home);
+// app.use('/users', users);
+
+passport.use(new LocalStrategy(
+  function (username, password, done) {
+    console.log(username);
+    console.log(password);
+    const db = require("./models");
+    db.Users.findOne({ where: { username: username } }).then(results => {
+      if (results === null) {
+        console.log("user does not exist. Please register or try again");
+        return done(null, false);
+      } else {
+        console.log(results.username);
+        const hash = results.password.toString();
+        console.log(hash);
+        console.log(password);
+        console.log(results.user_id);
+        bcrypt.compare(password, hash, function (err, response) {
+          console.log(response);
+          if (response) {
+            return (null, { user_id: results.user_id });
+          } else {
+            return (null, false);
+          }
+        })
+        // }), function (results, fields) {
+        // if (err) { done(err) }
+      }
+    });
+  }
+));
+
 
 // Handlebars
 app.engine(

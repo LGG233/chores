@@ -21,6 +21,13 @@ $(document).ready(function () {
         $('#login-modal').modal('show');
     });
 
+    $('#logout-btn').click(function () {
+        event.preventDefault();
+        $.ajax({
+            url: "/logout"
+        })
+    });
+
     // add chore to db //
     $("#submitNewChore").on("click", function () {
         event.preventDefault();
@@ -46,6 +53,19 @@ $(document).ready(function () {
         };
         api.newUser(JSON.stringify(newUser));
         $('#new-user-modal').modal('hide');
+    });
+
+    // login user //
+    $("#loginUser").on("click", function () {
+        event.preventDefault();
+        console.log("clicked login submit");
+        var oldUser = {
+            username: $("#usernameL").val().trim(),
+            password: $("#passwordL").val().trim(),
+        };
+        api.loginUser(JSON.stringify(oldUser));
+        window.location.reload('/');
+        $('#login-modal').modal('hide');
     });
 
     // get data for editing chore //
@@ -144,18 +164,6 @@ $(document).ready(function () {
         window.location.assign("/");
     });
 
-    // $.ajax({
-    //     headers: { "Content-type": "application/x-www-form-urlencoded" },
-    //     url: "api/getChores/" + username,
-    //     dataType: "json",
-    //     type: "GET"
-    // }).then(function (response) {
-    //     console.log("this is the response from the back end:")
-    //     console.log(response);
-    //     $("#handlebars-table").html(response.chores)
-    // $("#main-container").text(response);
-    // location.reload();
-
     var api = {
         newChore: function (newChore) {
             return $.ajax({
@@ -174,7 +182,16 @@ $(document).ready(function () {
                 type: "POST",
                 data: newUser
             }).then(function (response) {
-                location.reload();
+            })
+        },
+        loginUser: function (oldUser) {
+            return $.ajax({
+                headers: { "Content-type": "application/json" },
+                url: "api/loginUser",
+                type: "POST",
+                data: oldUser
+            }).then(function (response) {
+                // location.reload();
             })
         },
         getChore: function (chore_id) {

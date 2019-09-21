@@ -5,24 +5,42 @@ var passport = require("passport");
 
 
 module.exports = function (app) {
+    // // authenticates user//
+    // app.get('/', authenticationMiddleware(), function (req, res) {
+    // });
+
     // gets landing page //
-    app.get('/landing', function (req, res, next) {
-        console.log("on '/' " + req.user);
-        console.log("on '/' " + req.isAuthenticated());
-        res.render('landing', { title: 'Welcome' });
+    // app.get('/landing', function (req, res, next) {
+    //     console.log("on '/' user is " + (req.user));
+    //     console.log("on '/' authentication is " + (req.isAuthenticated()));
+    //     res.render('landing', { title: 'Welcome' });
+    // });
+
+
+    // gets start page //
+    app.get('/', function (req, res, next) {
+        res.render('index', { title: 'Welcome to Chores' });
     });
 
-    // gets home page if logged in //
-    app.get('/', authenticationMiddleware(), function (req, res, next) {
-        console.log("on '/' " + req.user);
-        console.log("on '/' " + req.isAuthenticated());
-        res.redirect('/home');
+    // gets new chore page //
+    app.get('/newChore', function (req, res, next) {
+        res.render('newChore', { title: 'Please enter your new chore' });
     });
 
-    // gets main page//
-    app.get('/home', authenticationMiddleware(), function (req, res) {
-        console.log("on 'home' " + req.user);
-        console.log("on 'home' " + req.isAuthenticated());
+    // gets login page //
+    app.get('/login', function (req, res, next) {
+        res.render('login', { title: 'Please log in' });
+    });
+
+    // gets registation page //
+    app.get('/register', function (req, res, next) {
+        res.render('register', { title: 'Welcome' });
+    });
+
+    // gets chores page//
+    app.get('/chores', function (req, res) {
+        console.log("on 'chores' " + req.user);
+        console.log("on 'chores' " + req.isAuthenticated());
         db.Chores.findAll({
             order: [['due_date']]
         }).then(function (dbChores) {
@@ -121,6 +139,20 @@ module.exports = function (app) {
             });
     });
 
+    // login user // 
+    app.post("/api/loginUser", passport.authenticate('local', {
+        successRedirect: '/chores',
+        failureRedirect: '/'
+    }));
+
+    // logout user //
+    app.get('/logout', function (req, res) {
+        req.logout();
+        req.session.destroy();
+        // window.location.reload('/landing');
+        res.redirect('/');
+    });
+
     // new chore api post
     app.post("/api/newChore", function (req, res) {
         db.Chores.create({
@@ -192,16 +224,19 @@ module.exports = function (app) {
 passport.serializeUser(function (user_id, done) {
     done(null, user_id);
 });
-
 passport.deserializeUser(function (user_id, done) {
     done(null, user_id);
 });
 
-
 function authenticationMiddleware() {
     return (req, res, next) => {
-        console.log(`req.session.passport.user: ${JSON.stringify(req.session.passport)}`);
-        if (req.isAuthenticated()) return next();
-        res.redirect('/landing')
+        // console.log(`req.session.passport.user: ${JSON.stringify(req.session.passport)}`);
+        if (req.isAuthenticated()) {
+            res.redirect('/chores');
+            return
+        } else {
+            res.redirect('/landing');
+            return
+        }
     }
 }

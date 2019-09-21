@@ -7,7 +7,7 @@ body {
     background-size: 100%;
 }
 .white-text {
-    color: black;
+    color: white;
     text-shadow: 10px;
 }
 .home-text {
@@ -29,4 +29,12 @@ body {
 
 .main-body {
     margin: auto;
+}
+
+.container {
+    color: white;
+}
+
+.row {
+    color: black;
 }

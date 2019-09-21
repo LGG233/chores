@@ -1,0 +1,18 @@
+{{> header }}
+<div class="container">
+
+    <h1>{{title}}</h1>
+    <p>Please log in to access your account</p>
+
+    <form id="login-modal-form" class="needs-validation" novalidate>
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" id="usernameL" placeholder="Enter your username">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="passwordL" placeholder="Enter password">
+        </div>
+        <button id="loginUser" type="submit" class="btn btn-primary btn-block">Submit</button>
+    </form>
+</div>
