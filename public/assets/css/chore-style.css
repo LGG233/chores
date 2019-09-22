@@ -38,3 +38,7 @@ body {
 .row {
     color: black;
 }
+
+#sign-up {
+    width: 450px
+}

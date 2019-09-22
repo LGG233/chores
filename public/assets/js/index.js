@@ -2,6 +2,7 @@
 
 $(document).ready(function () {
     $('#new-chore-btn').click(function () {
+        console.log("new chore button clicked");
         event.preventDefault();
         $('#new-chore-modal').modal('show');
     });
@@ -28,6 +29,11 @@ $(document).ready(function () {
         })
     });
 
+    // $('#test-button').click(function () {
+    //     event.preventDefault();
+    //     res.redirect('success');
+    // });
+
     // add chore to db //
     $("#submitNewChore").on("click", function () {
         event.preventDefault();
@@ -39,20 +45,22 @@ $(document).ready(function () {
         };
         console.log(newChore);
         api.newChore(JSON.stringify(newChore));
-        $('#new-chore-modal').modal('hide');
+        // $('#new-chore-modal').modal('hide');
     });
 
     // add user to db //
     $("#submitNewUser").on("click", function () {
         event.preventDefault();
+        console.log("new user butotn clicked");
         var newUser = {
-            username: $("#username").val().trim(),
-            email: $("#email").val().trim(),
-            password: $("#password").val().trim(),
-            passwordMatch: $("#passwordMatch").val().trim()
+            username: $("#username-register").val().trim(),
+            email: $("#email-register").val().trim(),
+            password: $("#password-register").val().trim(),
+            passwordMatch: $("#passwordMatch-register").val().trim()
         };
+        // console.log(newUser)
         api.newUser(JSON.stringify(newUser));
-        $('#new-user-modal').modal('hide');
+        // $('#new-user-modal').modal('hide');
     });
 
     // login user //
@@ -64,8 +72,7 @@ $(document).ready(function () {
             password: $("#passwordL").val().trim(),
         };
         api.loginUser(JSON.stringify(oldUser));
-        window.location.reload('/');
-        $('#login-modal').modal('hide');
+        // $('#login-modal').modal('hide');
     });
 
     // get data for editing chore //
@@ -139,7 +146,7 @@ $(document).ready(function () {
         var result = confirm("Want to delete chore # " + chore_id + "?");
         if (result) {
             $.ajax({
-                url: "api/choreDelete/" + chore_id,
+                url: "choreDelete/" + chore_id,
                 type: "DELETE"
             }).then(function (response) {
                 console.log(response);
@@ -176,6 +183,7 @@ $(document).ready(function () {
             })
         },
         newUser: function (newUser) {
+            console.log(newUser)
             return $.ajax({
                 headers: { "Content-type": "application/json" },
                 url: "api/newUser",
@@ -187,11 +195,10 @@ $(document).ready(function () {
         loginUser: function (oldUser) {
             return $.ajax({
                 headers: { "Content-type": "application/json" },
-                url: "api/loginUser",
+                url: "loginUser",
                 type: "POST",
                 data: oldUser
             }).then(function (response) {
-                // location.reload();
             })
         },
         getChore: function (chore_id) {

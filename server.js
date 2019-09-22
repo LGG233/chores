@@ -1,4 +1,3 @@
-// require("dotenv").config();
 var express = require("express");
 var exphbs = require("express-handlebars");
 var bodyParser = require("body-parser");
@@ -29,11 +28,6 @@ var options = {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   host: process.env.DB_HOST
-
-  // host: process.env.DB_HOST,
-  // user: process.env.DB_USER,
-  // password: process.env.DB_PASSWORD,
-  // database: process.env.DB_NAME
 };
 
 var sessionStore = new MySQLStore(options);
@@ -53,19 +47,19 @@ app.use(passport.session());
 
 passport.use(new LocalStrategy(
   function (username, password, done) {
-    console.log(username);
-    console.log(password);
+    // console.log(username);
+    // console.log(password);
     const db = require("./models");
     db.Users.findOne({ where: { username: username } }).then(results => {
       if (results === null) {
         console.log("user does not exist. Please register or try again");
         return done(null, false);
       } else {
-        console.log(results.username);
         const hash = results.password.toString();
-        console.log(hash);
-        console.log(password);
-        console.log(results.user_id);
+        // console.log(results.username);
+        // console.log(hash);
+        // console.log(password);
+        // console.log(results.user_id);
         bcrypt.compare(password, hash, function (err, response) {
           console.log(response);
           if (response) {
@@ -74,8 +68,6 @@ passport.use(new LocalStrategy(
             return (null, false);
           }
         })
-        // }), function (results, fields) {
-        // if (err) { done(err) }
       }
     });
   }

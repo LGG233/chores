@@ -1,26 +1,33 @@
+var express = require("express");
 var db = require("../models");
 var bcrypt = require("bcrypt");
 const saltRounds = 10;
 var passport = require("passport");
 
-
 module.exports = function (app) {
-    // // authenticates user//
-    // app.get('/', authenticationMiddleware(), function (req, res) {
-    // });
+    // PAGE ROUTES
 
     // gets landing page //
-    // app.get('/landing', function (req, res, next) {
-    //     console.log("on '/' user is " + (req.user));
-    //     console.log("on '/' authentication is " + (req.isAuthenticated()));
-    //     res.render('landing', { title: 'Welcome' });
-    // });
-
+    app.get('/landing', function (req, res, next) {
+        console.log("on '/' user is " + (req.user));
+        console.log("on '/' authentication is " + (req.isAuthenticated()));
+        res.render('landing', { title: 'Welcome' });
+    });
 
     // gets start page //
     app.get('/', function (req, res, next) {
         res.render('index', { title: 'Welcome to Chores' });
     });
+
+    // gets success page //
+    app.get('/success', authenticationMiddleware(), function (req, res) {
+        res.render('success', { title: 'Login Successful' });
+    });
+
+    // tests redirect page //
+    // app.get('/redirect', authenticationMiddleware(), function (req, res) {
+    //     res.render('success', { title: 'Login Successful' });
+    // });
 
     // gets new chore page //
     app.get('/newChore', function (req, res, next) {
@@ -32,13 +39,20 @@ module.exports = function (app) {
         res.render('login', { title: 'Please log in' });
     });
 
-    // gets registation page //
+    // gets registration page //
     app.get('/register', function (req, res, next) {
         res.render('register', { title: 'Welcome' });
     });
 
+    // logout user //
+    app.get('/logout', function (req, res) {
+        req.logout();
+        req.session.destroy();
+        res.redirect('/');
+    });
+
     // gets chores page//
-    app.get('/chores', function (req, res) {
+    app.get('/chores', authenticationMiddleware(), function (req, res) {
         console.log("on 'chores' " + req.user);
         console.log("on 'chores' " + req.isAuthenticated());
         db.Chores.findAll({
@@ -47,10 +61,25 @@ module.exports = function (app) {
             var hbsObject = {
                 Chores: dbChores
             };
-            res.render('home', hbsObject);
+            return res.render('home', hbsObject);
         });
     })
 
+    // gets chores page with "api" in URL
+    app.get('/api/chores', function (req, res) {
+        console.log("on 'api/chores' " + req.user);
+        console.log("on 'api/chores' " + req.isAuthenticated());
+        db.Chores.findAll({
+            order: [['due_date']]
+        }).then(function (dbChores) {
+            var hbsObject = {
+                Chores: dbChores
+            };
+            return res.render('home', hbsObject);
+        });
+    })
+
+    // gets chore data for editing // 
     app.get("/api/getChore/:chore_id", function (req, res) {
         db.Chores.findAll(
             {
@@ -61,7 +90,7 @@ module.exports = function (app) {
             });
     })
 
-    // // gets list of uncompleted chores for user //
+    // gets list of uncompleted chores for user //
     app.get("/api/choresTodoGet/:username", function (req, res) {
         db.Chores.findAll({
             order: [['createdAt', 'DESC']],
@@ -98,6 +127,8 @@ module.exports = function (app) {
 
     // new user api post
     app.post("/api/newUser", function (req, res) {
+        console.log("New User Registration triggered");
+        // console.log(req);
         db.Users.count({ where: { username: req.body.username } })
             .then(result => {
                 console.log(result)
@@ -128,30 +159,26 @@ module.exports = function (app) {
                             email: req.body.email,
                             password: hash,
                         }).then(function (results) {
+                            console.log("is user logged before starting? " + req.isAuthenticated());
                             const user_id = results.dataValues.user_id;
-                            console.log(user_id);
                             req.login(user_id, function (err) {
-                                res.redirect('/home')
+                                console.log("is user logged in after login fired? " + req.isAuthenticated());
+                                if (err) throw err
+
+                                res.redirect('/success');
                             })
                         });
+                        console.log("is user logged in for use elsewhere? " + req.isAuthenticated());
                     })
                 };
             });
     });
 
     // login user // 
-    app.post("/api/loginUser", passport.authenticate('local', {
-        successRedirect: '/chores',
-        failureRedirect: '/'
-    }));
-
-    // logout user //
-    app.get('/logout', function (req, res) {
-        req.logout();
-        req.session.destroy();
-        // window.location.reload('/landing');
-        res.redirect('/');
-    });
+    app.post("/loginUser", passport.authenticate('local', {
+        successRedirect: '/success',
+        failureRedirect: '/',
+    }))
 
     // new chore api post
     app.post("/api/newChore", function (req, res) {
@@ -230,13 +257,9 @@ passport.deserializeUser(function (user_id, done) {
 
 function authenticationMiddleware() {
     return (req, res, next) => {
-        // console.log(`req.session.passport.user: ${JSON.stringify(req.session.passport)}`);
-        if (req.isAuthenticated()) {
-            res.redirect('/chores');
-            return
-        } else {
-            res.redirect('/landing');
-            return
-        }
+        console.log(`req.session.passport.user: ${JSON.stringify(req.session.passport)}`);
+        if (req.isAuthenticated()) return next(
+        );
+        res.redirect('/')
     }
 }
